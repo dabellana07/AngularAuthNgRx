@@ -10,10 +10,10 @@ export class AuthService {
     const stsSettings = {
       authority: 'https://localhost:5001',
       client_id: 'interactive',
-      redirect_uri: 'http://localhost:4200/signin-callback',
+      redirect_uri: 'http://localhost:4200/auth/signin-callback',
       scope: 'openid profile scope2',
       response_type: 'code',
-      post_logout_redirect_uri: 'http://localhost:4200/signout-callback'
+      post_logout_redirect_uri: 'http://localhost:4200/auth/signout-callback'
     };
     this.userManager = new UserManager(stsSettings);
   }
