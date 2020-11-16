@@ -4,6 +4,7 @@ import { SharedModule } from '../shared/shared.module';
 import { throwIfAlreadyLoaded } from './guard/module-import.guard';
 import { AuthGuard } from './guard/auth.guard';
 import { AuthService } from './service/auth.service';
+import { SignedInGuard } from './guard/signed-in.guard';
 
 
 
@@ -15,6 +16,7 @@ import { AuthService } from './service/auth.service';
   ],
   providers: [
     AuthGuard,
+    SignedInGuard,
     AuthService
   ]
 })
