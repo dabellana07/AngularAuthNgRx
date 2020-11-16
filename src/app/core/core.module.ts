@@ -1,5 +1,6 @@
-import { NgModule } from '@angular/core';
+import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { SharedModule } from '../shared/shared.module';
+import { throwIfAlreadyLoaded } from './guard/module-import.guard';
 
 
 
@@ -9,4 +10,8 @@ import { SharedModule } from '../shared/shared.module';
     SharedModule
   ]
 })
-export class CoreModule { }
+export class CoreModule {
+  constructor(@Optional() @SkipSelf() parentModule: CoreModule) {
+    throwIfAlreadyLoaded(parentModule, 'CoreModule');
+  }
+}
