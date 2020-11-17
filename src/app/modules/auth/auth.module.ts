@@ -4,6 +4,10 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { AuthRoutingModule } from './auth-routing.module';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
+import { StoreModule } from '@ngrx/store';
+import { authReducer } from './state/auth.reducer';
+import { EffectsModule } from '@ngrx/effects';
+import { AuthEffects } from './state/auth.effects';
 
 
 
@@ -11,7 +15,9 @@ import { RegisterComponent } from './register/register.component';
   declarations: [LoginComponent, RegisterComponent],
   imports: [
     AuthRoutingModule,
-    SharedModule
+    SharedModule,
+    StoreModule.forFeature('auth', authReducer),
+    EffectsModule.forFeature([AuthEffects])
   ]
 })
 export class AuthModule { }
