@@ -3,8 +3,9 @@ import { catchError, map, mergeMap, tap } from 'rxjs/operators';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { AuthApiActions, AuthPageActions } from './actions';
 import { AuthService } from 'src/app/core/service/auth.service';
-import { from, Observable, of } from 'rxjs';
+import { from, of } from 'rxjs';
 import { Router } from '@angular/router';
+import { createAction } from '@ngrx/store';
 
 @Injectable()
 export class AuthEffects {
@@ -20,6 +21,13 @@ export class AuthEffects {
         ), { dispatch: false }
     );
 
+    logout$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(AuthPageActions.logout),
+            tap(_ => this.authService.logout())
+        ), { dispatch: false }
+    );
+
     completeLogin$ = createEffect(() => {
         return this.actions$.pipe(
             ofType(AuthPageActions.completeLogin),
@@ -30,10 +38,27 @@ export class AuthEffects {
         );
     });
 
-    completeLoginSuccess = createEffect(() => {
+    completeLogout$ = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(AuthPageActions.completeLogout),
+            mergeMap(() => from(this.authService.completeLogout()).pipe(
+                map(_ => AuthApiActions.completeLogoutSuccess()),
+                catchError(error => of(AuthApiActions.completeLogoutFailure(error))))
+            )
+        )
+    })
+
+    completeLoginSuccess$ = createEffect(() => {
         return this.actions$.pipe(
             ofType(AuthApiActions.completeLoginSuccess),
             tap(_ => this.router.navigate(['/']))
         )
     }, {dispatch: false});
+
+    completeLogoutSuccess$ = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(AuthApiActions.completeLogoutSuccess),
+            tap(_ => this.router.navigate(['/auth']))
+        )
+    }, { dispatch: false });
 }
